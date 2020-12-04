@@ -11,6 +11,7 @@ import com.google.cloud.datastore.*;
 import com.google.cloud.datastore.StructuredQuery.PropertyFilter;
 
 import ds.gae.helper.Quote;
+import ds.gae.helper.TemporaryReservation;
 import ds.gae.entities.*;
 import java.io.IOException;
 
@@ -101,7 +102,7 @@ public class Car {
     public Reservation addReservation(Transaction tx, Quote quote, int carId) {
     	
     	Reservation res = new Reservation(tx, key, quote, carId);
-    	reservations.add(res);
+    	reservations.add(new TemporaryReservation(quote, carId));
     	
     	Entity updatedEntity = Entity.newBuilder(key)
     			//trigger concurrency for transaction

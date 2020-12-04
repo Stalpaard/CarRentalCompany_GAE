@@ -43,19 +43,25 @@ public class QuoteTask implements DeferredTask {
 		DeferredTaskContext.setDoNotRetry(true);
 		Transaction tx = DatastoreOptions.getDefaultInstance().getService().newTransaction();
 		boolean failed = false;
+		Map<String, CarRentalCompany> crcMap = new HashMap<>();
 		
 		try {
-			Map<String, CarRentalCompany> crcMap = new HashMap<>();
+			
 			for(Quote quote : quotes)
 			{
-				if(crcMap.keySet().contains(quote.getRentalCompany()) == false) 
-					crcMap.put(quote.getRentalCompany(), new CarRentalCompany(Key.newBuilder(modelKey, "CarRentalCompany", quote.getRentalCompany()).build()));
-				CarRentalCompany crc = crcMap.get(quote.getRentalCompany());
+				String crcName = quote.getRentalCompany();
+				if(crcMap.keySet().contains(crcName) == false)
+				{
+					crcMap.put(crcName, new CarRentalCompany(Key.newBuilder(modelKey, "CarRentalCompany", crcName).build()));
+				}
+				
+				CarRentalCompany crc = crcMap.get(crcName);
+				System.out.println("opening crc");	
 				crc.confirmQuote(quote, tx);
 			}
 			tx.commit();
 		}
-		catch(ReservationException e) {
+		catch(Exception e) {
 			failed = true;
 			tx.rollback();
 			e.printStackTrace();
@@ -85,7 +91,7 @@ public class QuoteTask implements DeferredTask {
 			
 			Transport.send(msg);
 		}
-		catch(MessagingException | UnsupportedEncodingException e)
+		catch(Exception e)
 		{
 			e.printStackTrace();
 		}

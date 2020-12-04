@@ -32,7 +32,7 @@ public class Reservation {
     	
     	tx.put(entityTask);
     }
-
+    
     public Reservation(Key key) {
     	//Non-persisting constructor
         this.key = key;
@@ -51,7 +51,7 @@ public class Reservation {
     }
 
     public Date getStartDate() throws ClassNotFoundException, IOException {
-        return new Date(datastore.get(key).getLong("startDate"));
+    	return new Date(datastore.get(key).getLong("startDate"));
     }
 
     public Date getEndDate() throws ClassNotFoundException, IOException {
@@ -82,7 +82,7 @@ public class Reservation {
     public String toString() {
         try {
 			return String.format(
-			        "Quote for %s from %s to %s at %s\nCar type: %s\tTotal price: %.2f",
+			        "Reservation for %s from %s to %s at %s\nCar type: %s\tTotal price: %.2f",
 			        getRenter(),
 			        getStartDate(),
 			        getEndDate(),
