@@ -97,9 +97,9 @@ public class CarRentalModel {
      *
      * @param quote Quote to confirm
      */
-    public void confirmQuote(Quote quote) {
+    public void confirmQuote(Quote quote, String mailAddress) {
     	Queue queue = QueueFactory.getQueue("queue-quote");
-		queue.add(TaskOptions.Builder.withPayload(new QuoteTask(modelKey, quote)));
+		queue.add(TaskOptions.Builder.withPayload(new QuoteTask(modelKey, mailAddress, quote)));
     }
 
     /**
@@ -107,9 +107,9 @@ public class CarRentalModel {
      *
      * @param quotes the quotes to confirm
      */
-    public void confirmQuotes(List<Quote> quotes) {
+    public void confirmQuotes(List<Quote> quotes, String mailAddress) {
     	Queue queue = QueueFactory.getQueue("queue-quote");
-		queue.add(TaskOptions.Builder.withPayload(new QuoteTask(modelKey, quotes.toArray(new Quote[quotes.size()]))));
+		queue.add(TaskOptions.Builder.withPayload(new QuoteTask(modelKey, mailAddress, quotes.toArray(new Quote[quotes.size()]))));
     }
 
     /**
