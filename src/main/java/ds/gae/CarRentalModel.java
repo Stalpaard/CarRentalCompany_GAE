@@ -6,15 +6,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.cloud.datastore.*;
 import com.google.cloud.datastore.StructuredQuery.PropertyFilter;
 
-import ds.gae.entities.Car;
-import ds.gae.entities.CarRentalCompany;
-import ds.gae.entities.CarType;
-import ds.gae.helper.Quote;
-import ds.gae.helper.ReservationConstraints;
-import ds.gae.entities.Reservation;
+import ds.gae.entities.*;
+import ds.gae.helper.*;
+import ds.gae.tasks.*;
 
 public class CarRentalModel {
     
@@ -101,8 +101,10 @@ public class CarRentalModel {
     public void confirmQuote(Quote quote) throws ReservationException {
     	Transaction tx = datastore.newTransaction();
     	try {
-    		CarRentalCompany crc = new CarRentalCompany(Key.newBuilder(modelKey, "CarRentalCompany", quote.getRentalCompany()).build());
-            crc.confirmQuote(quote);
+    		Queue queue = QueueFactory.getQueue("queue-quote");
+    		queue.add(TaskOptions.Builder.withPayload(new QuoteTask(quote, modelKey)));
+    		//CarRentalCompany crc = new CarRentalCompany(Key.newBuilder(modelKey, "CarRentalCompany", quote.getRentalCompany()).build());
+            //crc.confirmQuote(quote);
             tx.commit();
     	}
     	catch(Exception e)
@@ -127,8 +129,10 @@ public class CarRentalModel {
     	for(Quote quote : quotes)
     	{
     		try {
-        		CarRentalCompany crc = new CarRentalCompany(Key.newBuilder(modelKey, "CarRentalCompany", quote.getRentalCompany()).build());
-                reservations.add(crc.confirmQuote(quote));
+    			Queue queue = QueueFactory.getQueue("queue-quote");
+        		queue.add(TaskOptions.Builder.withPayload(new QuoteTask(quote, modelKey)));
+        		//CarRentalCompany crc = new CarRentalCompany(Key.newBuilder(modelKey, "CarRentalCompany", quote.getRentalCompany()).build());
+                //reservations.add(crc.confirmQuote(quote));
         	}
         	catch(Exception e)
         	{

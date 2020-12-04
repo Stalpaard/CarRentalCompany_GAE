@@ -1,4 +1,4 @@
 queue:
-- name: queue-quotes
+- name: queue-quote
   rate: 5/s
   max_concurrent_requests: 10
