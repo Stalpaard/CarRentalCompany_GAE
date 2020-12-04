@@ -32,7 +32,7 @@ public class ConfirmQuotesServlet extends HttpServlet {
         for (String crcName : allQuotes.keySet()) {
             qs.addAll(allQuotes.get(crcName));
         }
-        CarRentalModel.get().confirmQuotes(qs);
+        CarRentalModel.get().confirmQuotes(qs, (String)session.getAttribute("renter"));
         
         session.setAttribute("quotes", new HashMap<String, ArrayList<Quote>>());
         
@@ -40,10 +40,6 @@ public class ConfirmQuotesServlet extends HttpServlet {
         // If you wish confirmQuotesReply.jsp to be shown to the client as
         // a response of calling this servlet, please replace the following line 
         // with resp.sendRedirect(JSPSite.CONFIRM_QUOTES_RESPONSE.url());
-<<<<<<< HEAD
-        //resp.sendRedirect(JSPSite.CREATE_QUOTES.url());
-=======
->>>>>>> branch 'master' of https://github.com/Mao-Jie/ds_gae2
         resp.sendRedirect(JSPSite.CONFIRM_QUOTES_RESPONSE.url());
         /*
         try {
