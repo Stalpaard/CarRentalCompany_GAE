@@ -27,24 +27,27 @@ public class ConfirmQuotesServlet extends HttpServlet {
         HttpSession session = req.getSession();
         HashMap<String, ArrayList<Quote>> allQuotes = (HashMap<String, ArrayList<Quote>>) session.getAttribute("quotes");
 
+        ArrayList<Quote> qs = new ArrayList<Quote>();
+        
+        for (String crcName : allQuotes.keySet()) {
+            qs.addAll(allQuotes.get(crcName));
+        }
+        CarRentalModel.get().confirmQuotes(qs);
+        
+        session.setAttribute("quotes", new HashMap<String, ArrayList<Quote>>());
+        
+        // TODO
+        // If you wish confirmQuotesReply.jsp to be shown to the client as
+        // a response of calling this servlet, please replace the following line 
+        // with resp.sendRedirect(JSPSite.CONFIRM_QUOTES_RESPONSE.url());
+        resp.sendRedirect(JSPSite.CREATE_QUOTES.url());
+        /*
         try {
-            ArrayList<Quote> qs = new ArrayList<Quote>();
             
-            for (String crcName : allQuotes.keySet()) {
-                qs.addAll(allQuotes.get(crcName));
-            }
-            CarRentalModel.get().confirmQuotes(qs);
-            
-            session.setAttribute("quotes", new HashMap<String, ArrayList<Quote>>());
-            
-            // TODO
-            // If you wish confirmQuotesReply.jsp to be shown to the client as
-            // a response of calling this servlet, please replace the following line 
-            // with resp.sendRedirect(JSPSite.CONFIRM_QUOTES_RESPONSE.url());
-            resp.sendRedirect(JSPSite.CREATE_QUOTES.url());
         } catch (ReservationException e) {
             session.setAttribute("errorMsg", Tools.encodeHTML(e.getMessage()));
             resp.sendRedirect(JSPSite.RESERVATION_ERROR.url());				
         }
+        */
     }
 }

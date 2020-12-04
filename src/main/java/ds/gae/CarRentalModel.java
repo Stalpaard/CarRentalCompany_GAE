@@ -96,9 +96,8 @@ public class CarRentalModel {
      * Confirm the given quote.
      *
      * @param quote Quote to confirm
-     * @throws ReservationException Confirmation of given quote failed.
      */
-    public void confirmQuote(Quote quote) throws ReservationException {
+    public void confirmQuote(Quote quote) {
     	Queue queue = QueueFactory.getQueue("queue-quote");
 		queue.add(TaskOptions.Builder.withPayload(new QuoteTask(modelKey, quote)));
     }
@@ -107,10 +106,8 @@ public class CarRentalModel {
      * Confirm the given list of quotes
      *
      * @param quotes the quotes to confirm
-     * @throws ReservationException One of the quotes cannot be confirmed. Therefore
-     *                              none of the given quotes is confirmed.
      */
-    public void confirmQuotes(List<Quote> quotes) throws ReservationException {
+    public void confirmQuotes(List<Quote> quotes) {
     	Queue queue = QueueFactory.getQueue("queue-quote");
 		queue.add(TaskOptions.Builder.withPayload(new QuoteTask(modelKey, quotes.toArray(new Quote[quotes.size()]))));
     }

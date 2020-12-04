@@ -159,7 +159,7 @@ public class CarRentalCompany {
         }
         Car car = availableCars.get((int) (Math.random() * availableCars.size()));
         
-        Reservation res = car.addReservation(quote, car.getId(), tx);
+        Reservation res = car.addReservation(tx, quote, car.getId());
         return res;
     }
 

@@ -17,7 +17,7 @@ public class Reservation {
      * CONSTRUCTOR *
      ***************/
 
-    public Reservation(Key carKey, Quote quote, int carId) {
+    public Reservation(Transaction tx, Key carKey, Quote quote, int carId) {
     	//Persisting constructor
     	Key newKey = datastore.allocateId(Key.newBuilder(carKey, "Reservation").build());
     	Entity entityTask = Entity.newBuilder(newKey)
@@ -30,7 +30,7 @@ public class Reservation {
     			.set("carId", carId)
     			.build();
     	
-    	datastore.put(entityTask);
+    	tx.put(entityTask);
     }
 
     public Reservation(Key key) {

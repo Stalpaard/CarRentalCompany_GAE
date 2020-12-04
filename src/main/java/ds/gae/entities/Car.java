@@ -98,9 +98,9 @@ public class Car {
         return true;
     }
     
-    public Reservation addReservation(Quote quote, int carId, Transaction tx) {
+    public Reservation addReservation(Transaction tx, Quote quote, int carId) {
     	
-    	Reservation res = new Reservation(key, quote, carId);
+    	Reservation res = new Reservation(tx, key, quote, carId);
     	reservations.add(res);
     	
     	Entity updatedEntity = Entity.newBuilder(key)

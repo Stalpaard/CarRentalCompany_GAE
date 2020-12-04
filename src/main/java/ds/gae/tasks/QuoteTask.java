@@ -1,6 +1,8 @@
 package ds.gae.tasks;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.DeferredTaskContext;
@@ -29,10 +31,13 @@ public class QuoteTask implements DeferredTask {
 		DeferredTaskContext.setDoNotRetry(true);
 		Transaction tx = DatastoreOptions.getDefaultInstance().getService().newTransaction();
 		try {
+			Map<String, CarRentalCompany> crcMap = new HashMap<>();
 			for(Quote quote : quotes)
 			{
 				System.out.println("New deferred task: " + quote.toString());
-				CarRentalCompany crc = new CarRentalCompany(Key.newBuilder(modelKey, "CarRentalCompany", quote.getRentalCompany()).build());
+				if(crcMap.keySet().contains(quote.getRentalCompany()) == false) 
+					crcMap.put(quote.getRentalCompany(), new CarRentalCompany(Key.newBuilder(modelKey, "CarRentalCompany", quote.getRentalCompany()).build()));
+				CarRentalCompany crc = crcMap.get(quote.getRentalCompany());
 				crc.confirmQuote(quote, tx);
 			}
 			tx.commit();
