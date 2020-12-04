@@ -60,7 +60,7 @@ public class CarType {
 
     @Override
     public int hashCode() {
-        return Objects.hash(key);
+        return Objects.hash(key.getName());
     }
 
     @Override

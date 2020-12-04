@@ -75,10 +75,7 @@ public class CarRentalCompany {
 
     public boolean isAvailable(String carTypeName, Date start, Date end) {
         logger.log(Level.INFO, "<{0}> Checking availability for car type {1}", new Object[] { getName(), carTypeName });
-        Set<CarType> availableTypes = getAvailableCarTypes(start, end);
-        logger.log(Level.INFO, "<{0}>" + availableTypes.size() + " available cars " + " for car type {1}", new Object[] { getName(), carTypeName });
-        for(CarType c : availableTypes) if(c.getName().equals(carTypeName)) return true;
-        return false;
+        return getAvailableCarTypes(start, end).contains(getCarType(carTypeName));
     }
 
     public Set<CarType> getAvailableCarTypes(Date start, Date end) {
