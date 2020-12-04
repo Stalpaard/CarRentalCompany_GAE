@@ -48,7 +48,6 @@ public class QuoteTask implements DeferredTask {
 			Map<String, CarRentalCompany> crcMap = new HashMap<>();
 			for(Quote quote : quotes)
 			{
-				System.out.println("New deferred task: " + quote.toString());
 				if(crcMap.keySet().contains(quote.getRentalCompany()) == false) 
 					crcMap.put(quote.getRentalCompany(), new CarRentalCompany(Key.newBuilder(modelKey, "CarRentalCompany", quote.getRentalCompany()).build()));
 				CarRentalCompany crc = crcMap.get(quote.getRentalCompany());
@@ -61,10 +60,10 @@ public class QuoteTask implements DeferredTask {
 			tx.rollback();
 			e.printStackTrace();
 		}
+		
 		Session session = Session.getDefaultInstance(new Properties());
 		try {
 			Message msg = new MimeMessage(session);
-			
 			InternetAddress adminEmail = new InternetAddress("admin@adminmail.com", "Admin");
 			InternetAddress clientEmail = new InternetAddress(mailAddress);
 			msg.setFrom(adminEmail);
@@ -82,7 +81,6 @@ public class QuoteTask implements DeferredTask {
 						+ " at " + q.getRentalCompany() + " for a total of: " + q.getRentalPrice() + "\n");
 			}
 			msg.setText(sb.toString());
-			
 			System.out.println(sb.toString());
 			
 			Transport.send(msg);
