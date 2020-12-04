@@ -122,8 +122,22 @@ public class CarRentalModel {
      *                              none of the given quotes is confirmed.
      */
     public List<Reservation> confirmQuotes(List<Quote> quotes) throws ReservationException {
-        // TODO: add implementation when time left, required for GAE2
-        return null;
+    	Transaction tx = datastore.newTransaction();
+    	List<Reservation> reservations = new ArrayList<>();
+    	for(Quote quote : quotes)
+    	{
+    		try {
+        		CarRentalCompany crc = new CarRentalCompany(Key.newBuilder(modelKey, "CarRentalCompany", quote.getRentalCompany()).build());
+                reservations.add(crc.confirmQuote(quote));
+        	}
+        	catch(Exception e)
+        	{
+        		if(tx.isActive()) tx.rollback();
+        		throw e;
+        	}
+    	}
+    	tx.commit();
+    	return reservations;
     }
 
     /**
