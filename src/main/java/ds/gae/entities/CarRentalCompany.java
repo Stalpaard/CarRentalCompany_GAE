@@ -91,16 +91,6 @@ public class CarRentalCompany {
     /*********
      * CARS *
      *********/
-/*
-    private Car getCar(int uid) {
-        for (Car car : cars) {
-            if (car.getId() == uid) {
-                return car;
-            }
-        }
-        throw new IllegalArgumentException("<" + getName() + "> No car with uid " + uid);
-    }
-*/
     public Set<Car> getCars() {
         return cars;
     }
