@@ -18,7 +18,7 @@ import ds.gae.tasks.*;
 
 public class CarRentalModel {
     
-    private Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+	private Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
     
     public Key modelKey = datastore.allocateId(datastore.newKeyFactory().setKind("CarRentalModel").newKey());
     
@@ -101,10 +101,8 @@ public class CarRentalModel {
     public void confirmQuote(Quote quote) throws ReservationException {
     	Transaction tx = datastore.newTransaction();
     	try {
-    		Queue queue = QueueFactory.getQueue("queue-quote");
-    		queue.add(TaskOptions.Builder.withPayload(new QuoteTask(quote, modelKey)));
-    		//CarRentalCompany crc = new CarRentalCompany(Key.newBuilder(modelKey, "CarRentalCompany", quote.getRentalCompany()).build());
-            //crc.confirmQuote(quote);
+    		//Queue queue = QueueFactory.getQueue("queue-quote");
+    		//queue.add(TaskOptions.Builder.withPayload(new QuoteTask(quote, modelKey)));
             tx.commit();
     	}
     	catch(Exception e)
@@ -119,29 +117,12 @@ public class CarRentalModel {
      * Confirm the given list of quotes
      *
      * @param quotes the quotes to confirm
-     * @return The list of reservations, resulting from confirming all given quotes.
      * @throws ReservationException One of the quotes cannot be confirmed. Therefore
      *                              none of the given quotes is confirmed.
      */
-    public List<Reservation> confirmQuotes(List<Quote> quotes) throws ReservationException {
-    	Transaction tx = datastore.newTransaction();
-    	List<Reservation> reservations = new ArrayList<>();
-    	for(Quote quote : quotes)
-    	{
-    		try {
-    			Queue queue = QueueFactory.getQueue("queue-quote");
-        		queue.add(TaskOptions.Builder.withPayload(new QuoteTask(quote, modelKey)));
-        		//CarRentalCompany crc = new CarRentalCompany(Key.newBuilder(modelKey, "CarRentalCompany", quote.getRentalCompany()).build());
-                //reservations.add(crc.confirmQuote(quote));
-        	}
-        	catch(Exception e)
-        	{
-        		if(tx.isActive()) tx.rollback();
-        		throw e;
-        	}
-    	}
-    	tx.commit();
-    	return reservations;
+    public void confirmQuotes(List<Quote> quotes) throws ReservationException {
+    	Queue queue = QueueFactory.getQueue("queue-quote");
+		queue.add(TaskOptions.Builder.withPayload(new QuoteTask(quotes, modelKey)));
     }
 
     /**

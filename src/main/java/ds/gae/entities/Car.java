@@ -98,7 +98,7 @@ public class Car {
         return true;
     }
     
-    public Reservation addReservation(Quote quote, int carId) {
+    public Reservation addReservation(Quote quote, int carId, Transaction tx) {
     	
     	Reservation res = new Reservation(key, quote, carId);
     	reservations.add(res);
@@ -107,7 +107,9 @@ public class Car {
     			//trigger concurrency for transaction
     			.set("reservations_made", ((datastore.get(key).getLong("reservations_made") + 1)%Long.MAX_VALUE))
     			.build();
-    	datastore.update(updatedEntity);
+    	
+    	
+    	tx.update(updatedEntity);
     			
     	return res;
     }
