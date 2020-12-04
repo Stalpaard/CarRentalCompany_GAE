@@ -109,7 +109,7 @@ public class Car {
     			.build();
     	
     	
-    	tx.update(updatedEntity);
+    	tx.put(updatedEntity);
     			
     	return res;
     }

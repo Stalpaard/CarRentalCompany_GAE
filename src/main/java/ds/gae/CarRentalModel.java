@@ -99,18 +99,8 @@ public class CarRentalModel {
      * @throws ReservationException Confirmation of given quote failed.
      */
     public void confirmQuote(Quote quote) throws ReservationException {
-    	Transaction tx = datastore.newTransaction();
-    	try {
-    		//Queue queue = QueueFactory.getQueue("queue-quote");
-    		//queue.add(TaskOptions.Builder.withPayload(new QuoteTask(quote, modelKey)));
-            tx.commit();
-    	}
-    	catch(Exception e)
-    	{
-    		if(tx.isActive()) tx.rollback();
-    		throw e;
-    	}
-    	
+    	Queue queue = QueueFactory.getQueue("queue-quote");
+		queue.add(TaskOptions.Builder.withPayload(new QuoteTask(modelKey, quote)));
     }
 
     /**
@@ -122,7 +112,7 @@ public class CarRentalModel {
      */
     public void confirmQuotes(List<Quote> quotes) throws ReservationException {
     	Queue queue = QueueFactory.getQueue("queue-quote");
-		queue.add(TaskOptions.Builder.withPayload(new QuoteTask(quotes, modelKey)));
+		queue.add(TaskOptions.Builder.withPayload(new QuoteTask(modelKey, quotes.toArray(new Quote[quotes.size()]))));
     }
 
     /**

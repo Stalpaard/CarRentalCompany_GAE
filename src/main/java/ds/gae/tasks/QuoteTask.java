@@ -15,10 +15,10 @@ import ds.gae.helper.*;
 
 public class QuoteTask implements DeferredTask {
 
-	private List<Quote> quotes;
+	private Quote[] quotes;
 	private Key modelKey;
 	
-	public QuoteTask(List<Quote> quotes, Key modelKey)
+	public QuoteTask(Key modelKey, Quote...quotes)
 	{
 		this.quotes = quotes;
 		this.modelKey = modelKey;
